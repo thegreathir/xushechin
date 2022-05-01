@@ -1,4 +1,15 @@
 {
-    "channels": ["futball120", "loopacademy", "durov"],
-    "message_count": 5
+    "channels": [
+        {
+            "name": "durov",
+            "start": 1619871031,
+            "end": 1651407229
+        },
+        {
+            "name": "loopacademy",
+            "start": 1649592631,
+            "end": 1650283831
+        }
+    ],
+    "output": "messages.csv"
 }

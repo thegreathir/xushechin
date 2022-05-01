@@ -15,7 +15,7 @@ async def gather_messages(
     messages_data_frame = pd.DataFrame(
         columns=[
             'channel',
-            'id',
+            'message_id',
             'text',
             'datetime',
             'reply_to',
@@ -23,11 +23,13 @@ async def gather_messages(
     )
 
     for item in tqdm(config['channels']):
+        offset_date = (
+            pytz.UTC.localize(datetime.fromtimestamp(item['end']))
+        ) if 'end' in item.keys() else None
+
         async for message in client.iter_messages(
             item['name'],
-            offset_date=pytz.UTC.localize(
-                datetime.fromtimestamp(item['end'])
-            )
+            offset_date=offset_date
         ):
             if message.date < pytz.UTC.localize(
                 datetime.fromtimestamp(item['start'])
@@ -36,7 +38,7 @@ async def gather_messages(
             reply_to = await message.get_reply_message()
             new_row = pd.DataFrame({
                 'channel': [item['name']],
-                'id': [message.id],
+                'message_id': [message.id],
                 'text': [message.text],
                 'datetime': [message.date],
                 'reply_to': [reply_to.id] if reply_to else [None]
@@ -66,7 +68,7 @@ def main():
             gather_messages(client, config)
         )
 
-    messages_data_frame.to_csv(config['output'])
+    messages_data_frame.to_csv(config['output'], index=False)
 
 
 if __name__ == '__main__':

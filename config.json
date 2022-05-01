@@ -2,8 +2,7 @@
     "channels": [
         {
             "name": "durov",
-            "start": 1619871031,
-            "end": 1651407229
+            "start": 1619871031
         },
         {
             "name": "loopacademy",
